@@ -1092,9 +1092,14 @@ class Predictor(object):
         _crr_scoring = self.scoring
         if self._scorer is not None and _crr_scoring is None:
             _crr_scoring = self._scorer.score
+        """
+        ['accuracy', 'adjusted_mutual_info_score', 'adjusted_rand_score', 'average_precision', 'completeness_score', 'explained_variance', 'f1', 'f1_macro', 'f1_micro', 'f1_samples', 'f1_weighted', 'fowlkes_mallows_score', 'homogeneity_score', 'mutual_info_score', 'neg_log_loss', 'neg_mean_absolute_error', 'neg_mean_squared_error', 'neg_mean_squared_log_error', 'neg_median_absolute_error', 'normalized_mutual_info_score', 'precision', 'precision_macro', 'precision_micro', 'precision_samples', 'precision_weighted', 'r2', 'recall', 'recall_macro', 'recall_micro', 'recall_samples', 'recall_weighted', 'roc_auc', 'v_measure_score']
+        _crr_scoring = 'precision'
+        """
         print('scoring: ', _crr_scoring)
         gs_params['_scorer'] = [self._scorer]
 
+        print(gs_params)
         full_pipeline = self._construct_pipeline(model_name=model_name, feature_learning=feature_learning, is_hp_search=True, keep_cat_features=self.transformation_pipeline.keep_cat_features)
 
         ppl = full_pipeline.named_steps['final_model']
