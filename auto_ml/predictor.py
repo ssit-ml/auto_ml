@@ -568,7 +568,7 @@ class Predictor(object):
         # Probably has to do with self.scoring vs self._scorer = scoring
         if self.type_of_estimator == 'classifier':
             if len(set(y)) > 2 and self.scoring is None:
-                self.scoring = 'accuracy_score'
+                self.scoring = 'accuracy'
             else:
                 scoring = utils_scoring.ClassificationScorer(self.scoring)
             self._scorer = scoring
