@@ -1089,6 +1089,9 @@ class Predictor(object):
             del gs_params['model']
         model_name = utils_models.get_name_from_model(model)
 
+        _crr_scoring = self.scoring
+        if self._scorer is not None:
+            _crr_scoring = self._scorer.score
         gs_params['_scorer'] = [self._scorer]
 
         full_pipeline = self._construct_pipeline(model_name=model_name, feature_learning=feature_learning, is_hp_search=True, keep_cat_features=self.transformation_pipeline.keep_cat_features)
@@ -1106,6 +1109,7 @@ class Predictor(object):
         total_combinations = 1
         for k, v in gs_params.items():
             total_combinations *= len(v)
+            print(k, v)
 
         n_jobs = -1
         population_size = 35
@@ -1144,7 +1148,7 @@ class Predictor(object):
                 # Print warnings when we fail to fit a given combination of parameters, but do not raise an error.
                 # Set the score on this partition to some very negative number, so that we do not choose this estimator.
                 error_score=-1000000000,
-                scoring=self._scorer.score,
+                scoring=_crr_scoring,
                 # Don't allocate memory for all jobs upfront. Instead, only allocate enough memory to handle the current jobs plus an additional 50%
                 pre_dispatch='1.5*n_jobs',
                 # The number of
@@ -1171,7 +1175,8 @@ class Predictor(object):
                 # Print warnings when we fail to fit a given combination of parameters, but do not raise an error.
                 # Set the score on this partition to some very negative number, so that we do not choose this estimator.
                 error_score=-1000000000,
-                scoring=self._scorer.score,
+                #scoring=self._scorer.score,
+                scoring=_crr_scoring,
                 # Don't allocate memory for all jobs upfront. Instead, only allocate enough memory to handle the current jobs plus an additional 50%
                 pre_dispatch='1.5*n_jobs',
                 refit=refit
@@ -1192,6 +1197,7 @@ class Predictor(object):
                 # Note that we will only report analytics results on the final model that ultimately gets selected, and trained on the entire dataset
 
         gs.fit(X_df, y)
+        print(gs)
 
         if self.verbose:
             self.print_training_summary(gs)
