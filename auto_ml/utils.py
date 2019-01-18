@@ -310,3 +310,31 @@ def clean_params(params):
             cleaned_params[k[7:]] = v
 
     return cleaned_params
+
+def get_titanic_binary_classification_dataset(basic=True):
+
+    dir_name = os.path.abspath(os.path.dirname(__file__))
+    file_name = os.path.join(dir_name, 'titanic.csv')
+    print('file_name')
+    print(file_name)
+    print('dir_name')
+    print(dir_name)
+    try:
+        df_titanic = pd.read_csv(file_name)
+    except Exception as e:
+        print('Error')
+        print(e)
+        dataset_url = 'http://biostat.mc.vanderbilt.edu/wiki/pub/Main/DataSets/titanic3.csv'
+        df_titanic = pd.read_csv(dataset_url)
+        # Do not write the index that pandas automatically creates
+        df_titanic.to_csv(file_name, index=False)
+
+    df_titanic = df_titanic.drop(['boat', 'body'], axis=1)
+
+    if basic == True:
+        df_titanic = df_titanic.drop(['name', 'ticket', 'cabin', 'home.dest'], axis=1)
+
+    df_titanic_train, df_titanic_test = train_test_split(df_titanic, test_size=0.33, random_state=42)
+    return df_titanic_train, df_titanic_test
+
+

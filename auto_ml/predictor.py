@@ -1090,8 +1090,9 @@ class Predictor(object):
         model_name = utils_models.get_name_from_model(model)
 
         _crr_scoring = self.scoring
-        if self._scorer is not None:
+        if self._scorer is not None and _crr_scoring is None:
             _crr_scoring = self._scorer.score
+        print('scoring: ', _crr_scoring)
         gs_params['_scorer'] = [self._scorer]
 
         full_pipeline = self._construct_pipeline(model_name=model_name, feature_learning=feature_learning, is_hp_search=True, keep_cat_features=self.transformation_pipeline.keep_cat_features)
