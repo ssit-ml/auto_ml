@@ -505,7 +505,8 @@ def get_search_params(model_name):
         },
 
         'SGDClassifier': {
-            'loss': ['hinge', 'log', 'modified_huber', 'squared_hinge', 'perceptron', 'squared_loss', 'huber', 'epsilon_insensitive', 'squared_epsilon_insensitive'],
+            #'loss': ['hinge', 'log', 'modified_huber', 'squared_hinge', 'perceptron', 'squared_loss', 'huber', 'epsilon_insensitive', 'squared_epsilon_insensitive'],
+            'loss': ['log', 'modified_huber'],
             'penalty': ['none', 'l2', 'l1', 'elasticnet'],
             'alpha': [.0000001, .000001, .00001, .0001, .001],
             'eta0': [.01, .001, .0001],
